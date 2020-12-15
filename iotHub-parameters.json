@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hubname": {
+            "value": "iothub128partition"
+        },
+        "location": {
+            "value": "canadacentral"
+        },
+        "sku_name": {
+            "value": "S1"
+        },
+        "sku_units": {
+            "value": 1
+        },
+        "d2c_partitions": {
+            "value": 128
+        },
+        "features": {
+            "value": "None"
+        },
+        "tags": {
+            "value": {}
+        },
+        "cloudEnvironment": {
+            "value": "public"
+        }
+    }
+}

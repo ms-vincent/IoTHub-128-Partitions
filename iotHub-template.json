@@ -1,0 +1,93 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hubname": {
+            "type": "string",
+            "minLength": 3,
+            "metadata": {
+                "description": "Name of the IoT Hub instance to provision."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "CanadaCentral"
+        },
+        "sku_name": {
+            "type": "string",
+            "defaultValue": "S1",
+            "allowedValues": [
+                "S1",
+                "S2",
+                "S1",
+                "B1",
+                "B2",
+                "B3"
+            ],
+            "metadata": {
+                "description": "One of the supported SKUs: basic or standard"
+            }
+        },
+        "sku_units": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Number of desired IoT Hub units. Restricted to 1 unit for F1. Can be set up to maximum number allowed for subscription."
+            }
+        },
+        "d2c_partitions": {
+            "type": "int",
+            "metadata": {
+                "description": "Number of desired partitions for device-to-cloud event ingestion."
+            },
+            "defaultValue": 4
+        },
+        "features": {
+            "type": "string"
+        },
+        "tags": {
+            "type": "object"
+        },
+        "cloudEnvironment": {
+            "type": "string",
+            "metadata": {
+                "description": "Cloud environment to deploy (i.e. usgov/china/ ...)"
+            },
+            "allowedValues": [
+                "public",
+                "usgov"
+            ],
+            "defaultValue": "public"
+        },
+        "d2cConsumerGroupName": {
+            "type": "string",
+            "minLength": 3,
+            "defaultValue": "explorer",
+            "metadata": {
+                "description": "Name of device-to-cloud consumer group to provision on the IoT Hub instance."
+            }
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-07-10-preview",
+            "type": "Microsoft.Devices/IotHubs",
+            "name": "[parameters('hubname')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "eventHubEndpoints": {
+                    "events": {
+                        "retentionTimeInDays": 1,
+                        "partitionCount": "[parameters('d2c_partitions')]"
+                    }
+                },
+                "features": "[parameters('features')]"
+            },
+            "sku": {
+                "name": "[parameters('sku_name')]",
+                "capacity": "[parameters('sku_units')]"
+            },
+            "tags": "[parameters('tags')]"
+        }
+    ]
+}
